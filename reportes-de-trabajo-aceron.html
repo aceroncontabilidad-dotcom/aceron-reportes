@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0f1115" />
+    <link rel="icon" href="data:," />
+    <title>Reportes de Trabajo ACERON</title>
+    <style>
+      :root{
+        color-scheme: dark;
+        --bg:#0f1115;
+        --surface:#181b22;
+        --surface2:#1f232c;
+        --surface3:#252a35;
+        --text:#e9ecf1;
+        --dim:#8a93a3;
+        --dim2:#6b7486;
+        --border:#2a2f3a;
+        --accent:#4a9eff;
+        --accent-dark:#2e7fe8;
+        --green:#3fb97a;
+        --red:#e5594f;
+        --radius:14px;
+      }
+      *{box-sizing:border-box}
+      html{-webkit-text-size-adjust:100%}
+      body{
+        margin:0;
+        background:var(--bg);
+        color:var(--text);
+        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        line-height:1.45;
+        padding-bottom:env(safe-area-inset-bottom);
+      }
+      a{color:var(--accent)}
+      [hidden]{display:none !important}
+      /* ---------- header ---------- */
+      header{
+        position:sticky;top:0;z-index:20;
+        background:rgba(15,17,21,.96);
+        backdrop-filter:blur(8px);
+        border-bottom:1px solid var(--border);
+        padding-top:env(safe-area-inset-top);
+      }
+      .header-in{
+        max-width:520px;margin:0 auto;
+        padding:14px 14px 10px;
+        display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      }
+      .brand{font-size:17px;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+      .brand span{color:var(--accent)}
+      .tabs-wrap{max-width:520px;margin:0 auto;padding:0 14px 12px}
+      .tabs{display:flex;gap:6px}
+      .tabs button{
+        flex:1;background:var(--surface);border:1px solid var(--border);color:var(--dim);
+        padding:9px 6px;font-size:13px;font-weight:600;border-radius:10px;cursor:pointer;font:inherit;
+      }
+      .tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+      .head-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+      .live{
+        display:inline-flex;align-items:center;gap:6px;
+        font-size:12px;font-weight:700;color:var(--green);
+        border:1px solid var(--border);background:var(--surface);
+        padding:6px 10px;border-radius:999px;white-space:nowrap;
+      }
+      .live .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.6s ease-in-out infinite}
+      .live.off{color:var(--dim)}
+      .live.off .dot{background:var(--dim);animation:none}
+      .live.err{color:var(--red)}
+      .live.err .dot{background:var(--red);animation:none}
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+      @media (prefers-reduced-motion: reduce){.live .dot{animation:none}}
+      .session{
+        display:inline-flex;align-items:center;gap:8px;
+        border:1px solid var(--border);background:var(--surface);
+        padding:4px 4px 4px 11px;border-radius:999px;max-width:100%;
+      }
+      .session .who{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+      .btn-logout{
+        background:var(--surface3);color:var(--text);
+        border:1px solid var(--border);border-radius:999px;
+        font:inherit;font-size:12px;font-weight:700;
+        padding:5px 10px;cursor:pointer;white-space:nowrap;
+      }
+      .btn-logout:hover{border-color:var(--red);color:#ffb4ad}
+      /* ---------- layout ---------- */
+      main{max-width:520px;margin:0 auto;padding:0 14px 48px}
+      .card{
+        background:var(--surface);
+        border:1px solid var(--border);
+        border-radius:14px;
+        padding:14px;
+        margin-top:12px;
+      }
+      .card h2{margin:0;font-size:16px;font-weight:800}
+      .card .sub{margin:3px 0 0;font-size:13px;color:var(--dim)}
+      label{display:block;margin:14px 0 6px;font-size:12px;font-weight:600;color:var(--dim)}
+      label:first-of-type{margin-top:16px}
+      .req{color:var(--accent)}
+      input,select,textarea{
+        width:100%;
+        background:var(--surface2);
+        border:1px solid var(--border);
+        border-radius:12px;
+        color:var(--text);
+        font:inherit;font-size:16px;
+        padding:11px 12px;
+        outline:none;
+        appearance:none;-webkit-appearance:none;
+      }
+      textarea{resize:vertical;min-height:64px}
+      input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+      input::placeholder,textarea::placeholder{color:var(--dim2)}
+      select{
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%238a93a3' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat:no-repeat;background-position:right 12px center;
+        padding-right:34px;
+      }
+      input[type="date"]{min-height:48px}
+      input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.7);cursor:pointer}
+      .btn{
+        width:100%;margin-top:18px;
+        background:var(--accent);
+        color:#fff;border:0;border-radius:12px;
+        padding:13px 16px;
+        font:inherit;font-size:16px;font-weight:800;
+        cursor:pointer;
+      }
+      .btn:hover{background:var(--accent-dark)}
+      .btn:disabled{opacity:.45;cursor:default}
+      .btn:active{transform:translateY(1px)}
+      /* ---------- login ---------- */
+      .login-wrap{padding-top:26px}
+      .login-card{padding:22px 18px}
+      .login-card h2{font-size:20px}
+      .hint{margin-top:12px;font-size:13px;color:var(--dim);line-height:1.55}
+      .linklike{
+        background:none;border:0;padding:0;margin-top:14px;
+        color:var(--accent);font:inherit;font-size:13px;font-weight:700;
+        cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+      }
+      details.rules{margin-top:12px}
+      details.rules summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent)}
+      details.rules pre{
+        margin:10px 0 0;background:var(--bg);border:1px solid var(--border);
+        border-radius:10px;padding:11px 12px;font-size:12.5px;line-height:1.55;
+        overflow-x:auto;white-space:pre;color:var(--text);
+      }
+      /* ---------- banners ---------- */
+      .banner{
+        display:none;
+        margin-top:14px;border-radius:12px;padding:11px 13px;
+        font-size:14px;line-height:1.5;
+      }
+      .banner.show{display:block}
+      .banner.err{background:rgba(229,89,79,.12);border:1px solid var(--red);color:#ffb4ad}
+      .banner.ok{background:rgba(63,185,122,.12);border:1px solid var(--green);color:#a9e8c6}
+      .banner.info{background:rgba(74,158,255,.10);border:1px solid var(--accent);color:#bcd9ff}
+      .banner b{color:inherit}
+      /* ---------- quién reporta ---------- */
+      .who-row{display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+      .who-row .lbl{font-size:12px;font-weight:600;color:var(--dim)}
+      .who-chip{
+        display:inline-flex;align-items:center;gap:7px;
+        padding:4px 11px;border-radius:999px;
+        border:1px solid var(--accent);color:var(--accent);
+        font-size:13px;font-weight:700;
+      }
+      .who-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+      /* ---------- cuentas (admin) ---------- */
+      .admin-card{margin-bottom:14px}
+      .clave-row{
+        display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+        padding:12px 0;border-top:1px solid var(--border);
+      }
+      .clave-row:first-of-type{margin-top:8px}
+      .clave-info{flex:1 1 150px;min-width:140px}
+      .clave-name{font-size:14px;font-weight:700;line-height:1.3}
+      .pill{
+        display:inline-block;margin-top:3px;padding:1px 8px;border-radius:999px;
+        font-size:11px;font-weight:700;border:1px solid var(--border);color:var(--dim);
+      }
+      .pill.on{color:var(--green);border-color:var(--green)}
+      .pill.off{color:var(--dim);border-color:var(--border)}
+      .clave-row input{flex:1 1 120px;font-size:14px;padding:9px 11px}
+      .btn-mini{
+        background:var(--surface3);color:var(--text);
+        border:1px solid var(--border);border-radius:10px;
+        font:inherit;font-size:13px;font-weight:700;
+        padding:9px 13px;cursor:pointer;white-space:nowrap;
+      }
+      .btn-mini:hover{border-color:var(--accent);color:var(--accent)}
+      .btn-mini:disabled{opacity:.45;cursor:default}
+      .btn-mini.danger{border-color:var(--red);color:#ffb4ad}
+      .act-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+      .login-card h2 .accent{color:var(--accent)}
+      /* ---------- stats ---------- */
+      .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+      .stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:11px}
+      .stat .l{font-size:12px;color:var(--dim);font-weight:600}
+      .stat .v{font-size:20px;font-weight:800;margin-top:4px}
+      .emp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+      .emp-card .emp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+      .emp-card h3{margin:0;font-size:16px}
+      .tag-puesto{
+        display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;
+        background:var(--surface2);border:1px solid var(--border);color:var(--dim);white-space:nowrap;
+      }
+      .sec-title{margin:22px 0 0;font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+      .stat .v.blue{color:var(--accent)}
+      .stat .v.green{color:var(--green)}
+      /* ---------- list ---------- */
+      .section-head{
+        display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+        margin:26px 2px 4px;
+      }
+      .section-head h2{
+        margin:0;font-size:12px;font-weight:700;letter-spacing:.09em;
+        text-transform:uppercase;color:var(--dim);
+      }
+      .section-head .count{font-size:12px;color:var(--dim2)}
+      .filters{display:flex;gap:8px;margin-top:10px}
+      .filters input{flex:1.4}
+      .filters select{flex:1}
+      .filters input,.filters select{font-size:14px;padding:9px 11px}
+      .filters select{padding-right:30px}
+      .report{
+        background:var(--surface);border:1px solid var(--border);
+        border-radius:14px;padding:15px 16px;margin-top:12px;
+      }
+      .report-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+      .report-who{font-size:16px;font-weight:800;line-height:1.3}
+      .report-when{font-size:12px;color:var(--dim);white-space:nowrap;text-align:right;line-height:1.5}
+      .tag{
+        display:inline-flex;align-items:center;gap:6px;
+        margin-top:7px;padding:3px 10px;border-radius:999px;
+        border:1px solid var(--accent);color:var(--accent);
+        font-size:12px;font-weight:700;max-width:100%;
+      }
+      .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+      .tag span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .report-work{margin-top:10px;font-size:15px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+      .report-obs{
+        margin-top:9px;font-size:14px;color:var(--dim);line-height:1.55;
+        white-space:pre-wrap;word-break:break-word;
+        background:var(--surface2);border-radius:10px;padding:9px 11px;
+      }
+      .report-obs b{color:var(--text);font-size:12px;display:block;margin-bottom:2px}
+      .empty{
+        margin-top:12px;text-align:center;color:var(--dim);
+        font-size:14px;padding:34px 18px;
+        background:var(--surface);border:1px dashed var(--border);border-radius:14px;
+        line-height:1.6;
+      }
+      .empty b{color:var(--text);display:block;font-size:15px;margin-bottom:4px}
+      .skeleton{margin-top:12px}
+      .sk{
+        height:110px;border-radius:14px;margin-top:12px;
+        background:linear-gradient(100deg,var(--surface) 40%,var(--surface3) 50%,var(--surface) 60%);
+        background-size:200% 100%;animation:shimmer 1.3s infinite;
+      }
+      @keyframes shimmer{to{background-position:-200% 0}}
+      @media (prefers-reduced-motion: reduce){.sk{animation:none}}
+      /* ---------- toast ---------- */
+      .toast{
+        position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));
+        transform:translate(-50%,16px);
+        z-index:50;max-width:min(92vw,480px);
+        background:var(--green);color:#08130d;
+        font-size:14px;font-weight:800;
+        padding:11px 18px;border-radius:12px;
+        box-shadow:0 10px 30px rgba(0,0,0,.55);
+        opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+        text-align:center;
+      }
+      .toast.show{opacity:1;transform:translate(-50%,0)}
+      .toast.err{background:var(--red);color:#fff}
+      @media (max-width:380px){
+        .stats{gap:6px}
+        .stat{padding:9px}
+        .stat .v{font-size:18px}
+        .filters{flex-direction:column}
+        .session .who{max-width:110px}
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-in">
+        <div class="brand">ACERON <span>· Reportes</span></div>
+        <div class="head-right">
+          <span class="session" id="sessionChip" hidden>
+            <span class="who" id="sessionName"></span>
+            <button type="button" class="btn-logout" id="btnSalir">Cerrar sesión</button>
+          </span>
+          <span class="live off" id="liveBadge"><span class="dot"></span><span id="liveText">Conectando…</span></span>
+        </div>
+      </div>
+      <div class="tabs-wrap" id="tabsWrap" hidden>
+        <div class="tabs" id="tabsBar" role="tablist"></div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ============ LOGIN ============ -->
+      <div class="login-wrap" id="loginView">
+        <section class="card login-card" aria-labelledby="loginTitle">
+          <h2 id="loginTitle">ACERON <span class="accent">· Reportes</span></h2>
+          <p class="sub">Elige tu usuario y escribe tu contraseña.</p>
+
+          <form id="loginForm" novalidate>
+            <label for="loginUsuario">Usuario <span class="req">*</span></label>
+            <select id="loginUsuario" required>
+              <option value="">— Elige tu usuario —</option>
+            </select>
+
+            <label for="loginClave" id="loginClaveLabel">Contraseña <span class="req">*</span></label>
+            <input type="password" id="loginClave" autocomplete="current-password" placeholder="Tu contraseña" />
+
+            <div id="confirmGroup" hidden>
+              <label for="loginClave2">Repite la contraseña <span class="req">*</span></label>
+              <input type="password" id="loginClave2" autocomplete="new-password" placeholder="Repite la contraseña" />
+            </div>
+
+            <p class="hint" id="loginHint" hidden></p>
+
+            <div class="banner err" id="loginError" role="alert"></div>
+
+            <button type="submit" class="btn" id="btnEntrar" disabled>Entrar</button>
+            <button type="button" class="linklike" id="modoCrearLink" hidden>Primera vez del Administrador: crear mi contraseña</button>
+          </form>
+        </section>
+      </div>
+
+      <!-- ============ APP (después de entrar) ============ -->
+      <div id="appView" hidden>
+        <!-- Estado de conexión / errores de conexión -->
+        <div class="banner info show" id="connBanner" role="status" style="margin:0 0 14px">
+          Conectando con el servidor de ACERON…
+        </div>
+
+        <!-- Resumen: 4 estadísticas, arriba -->
+        <div id="statsBlock">
+          <div class="stats" aria-label="Resumen de reportes">
+            <div class="stat"><div class="l">Reportes de hoy</div><div class="v green" id="statHoy">—</div></div>
+            <div class="stat"><div class="l">Esta semana</div><div class="v blue" id="statSemana">—</div></div>
+            <div class="stat"><div class="l">Este mes</div><div class="v blue" id="statMes">—</div></div>
+            <div class="stat"><div class="l">Total</div><div class="v" id="statTotal">—</div></div>
+          </div>
+        </div>
+
+        <!-- Equipo (solo Administrador, pestaña Empleados):
+             una tarjeta por persona, con sus números y su botón de contraseña -->
+        <div id="empleadosBlock" hidden>
+          <div class="sec-title" style="margin-top:6px">Equipo</div>
+          <div class="banner err" id="clavesError" role="alert"></div>
+          <details class="rules" id="reglasAdmin" hidden>
+            <summary>¿Qué bloque hay que agregar en las reglas de Firebase?</summary>
+            <pre>"reportes_usuarios": {
+  ".read": "auth != null",
+  ".write": "auth != null"
+}</pre>
+          </details>
+          <div id="empleadosLista"></div>
+        </div>
+
+        <!-- Clientes (solo Administrador, pestaña Clientes) -->
+        <div id="clientesBlock" hidden>
+          <div class="sec-title" style="margin-top:6px">Clientes</div>
+          <div id="clientesLista"></div>
+        </div>
+
+        <!-- Actividad (solo Administrador, pestaña Actividad) -->
+        <div id="actividadBlock" hidden>
+          <div class="sec-title" style="margin-top:6px">Actividad</div>
+          <div class="banner err" id="actividadError" role="alert"></div>
+          <div id="actividadLista"></div>
+        </div>
+
+        <!-- Formulario -->
+        <section class="card" id="formCard" aria-labelledby="formTitle">
+          <h2 id="formTitle">Enviar reporte de trabajo</h2>
+          <p class="sub">Al guardarlo, el reporte se ve al momento en todos los celulares conectados.</p>
+          <div class="who-row">
+            <span class="lbl">Reportando como</span>
+            <span class="who-chip"><span class="dot"></span><span id="whoName"></span></span>
+          </div>
+
+          <form id="form" novalidate>
+            <label for="fecha">Fecha del trabajo <span class="req">*</span></label>
+            <input type="date" id="fecha" required />
+
+            <label for="cliente">Cliente <span class="req">*</span></label>
+            <input type="text" id="cliente" placeholder="Ej: METPRO, Hospital Anamuya, La Sirena…" autocomplete="off" required />
+
+            <label for="trabajo">Trabajo realizado <span class="req">*</span></label>
+            <textarea id="trabajo" placeholder="Ej: Soldé e instalé 4 tramerías de 1.20 m en el almacén" required></textarea>
+
+            <label for="observaciones">Observaciones</label>
+            <textarea id="observaciones" placeholder="Material que faltó, algo pendiente, un problema… (opcional)" style="min-height:52px"></textarea>
+
+            <div class="banner err" id="formError" role="alert"></div>
+
+            <button type="submit" class="btn" id="btnGuardar" disabled>Guardar reporte</button>
+          </form>
+        </section>
+
+        <div id="listBlock">
+        <!-- Lista en vivo -->
+        <div class="section-head">
+          <h2 id="listTitle">Reportes recibidos</h2>
+          <span class="count" id="listCount"></span>
+        </div>
+
+        <div class="filters">
+          <input type="search" id="buscar" placeholder="Buscar por cliente o trabajo…" aria-label="Buscar reportes" />
+          <select id="filtroEmpleado" aria-label="Filtrar por empleado">
+            <option value="">Todos los empleados</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Wilmer José Alcántara Toledo">Wilmer · Pulidor</option>
+            <option value="Edison Núñez Santo">Dalvin (Edison Núñez Santo) · Soldador</option>
+            <option value="Richard Cabrera Díaz">Richard · Soldador</option>
+          </select>
+        </div>
+
+        <div class="skeleton" id="skeleton" aria-hidden="true">
+          <div class="sk"></div>
+          <div class="sk"></div>
+        </div>
+
+        <div id="lista"></div>
+        <div class="banner err" id="listError" role="alert"></div>
+        </div>
+      </div>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <!-- Firebase (build compat: expone el objeto global `firebase`) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        var firebaseConfig = {
+          apiKey: "AIzaSyAYqmuHtrXuu0RX3l0r6ZjUN8Wn9xSN5QY",
+          authDomain: "aceron-srl.firebaseapp.com",
+          databaseURL: "https://aceron-srl-default-rtdb.firebaseio.com",
+          projectId: "aceron-srl"
+        };
+
+        /* Solo el Administrador y los tres empleados del equipo.
+           «nombre» es el nombre con el que se guardan los reportes en Firebase;
+           «etiqueta» es lo que se ve en el login y en las tarjetas. */
+        var USUARIOS = [
+          { key: "admin",   nombre: "Administrador",                puesto: "",         etiqueta: "Administrador" },
+          { key: "wilmer",  nombre: "Wilmer José Alcántara Toledo", puesto: "Pulidor",  etiqueta: "Wilmer · Pulidor" },
+          { key: "edison",  nombre: "Edison Núñez Santo",           puesto: "Soldador", etiqueta: "Dalvin (Edison Núñez Santo) · Soldador" },
+          { key: "richard", nombre: "Richard Cabrera Díaz",         puesto: "Soldador", etiqueta: "Richard · Soldador" }
+        ];
+        function etiquetaDe(u) { return u ? (u.etiqueta || u.nombre) : ""; }
+        /* Cada usuario tiene su cuenta real de Firebase Authentication.
+           La contraseña la guarda y la verifica Firebase: nunca vive en esta página ni en la base de datos. */
+        var EMAIL_DOMINIO = "@aceron.reportes";
+        function emailDe(key) { return key + EMAIL_DOMINIO; }
+        function usuarioPorKey(key) {
+          for (var i = 0; i < USUARIOS.length; i++) if (USUARIOS[i].key === key) return USUARIOS[i];
+          return null;
+        }
+        function keyDeEmail(email) {
+          if (!email) return null;
+          var p = String(email).split("@")[0];
+          return usuarioPorKey(p) ? p : null;
+        }
+        function esAdmin() { return sesion === "admin"; }
+        function nombreSesion() {
+          var u = usuarioPorKey(sesion);
+          return u ? u.nombre : "";
+        }
+        function etiquetaSesion() {
+          return etiquetaDe(usuarioPorKey(sesion));
+        }
+        /* Nombre corto para mostrar un reporte: Dalvin en vez del nombre completo. */
+        function nombreVisible(nombre) {
+          for (var i = 0; i < USUARIOS.length; i++) {
+            if (USUARIOS[i].nombre === nombre) {
+              return USUARIOS[i].key === "edison" ? "Dalvin · Edison Núñez Santo"
+                : USUARIOS[i].key === "wilmer" ? "Wilmer"
+                : USUARIOS[i].key === "richard" ? "Richard"
+                : USUARIOS[i].nombre;
+            }
+          }
+          return nombre || "Sin nombre";
+        }
+
+        var $ = function (id) { return document.getElementById(id); };
+        var loginView = $("loginView"), appView = $("appView"),
+            loginForm = $("loginForm"), loginUsuario = $("loginUsuario"),
+            loginClave = $("loginClave"), loginClave2 = $("loginClave2"),
+            loginClaveLabel = $("loginClaveLabel"), confirmGroup = $("confirmGroup"),
+            loginHint = $("loginHint"), loginError = $("loginError"),
+            btnEntrar = $("btnEntrar"), modoCrearLink = $("modoCrearLink"),
+            sessionChip = $("sessionChip"), sessionName = $("sessionName"), btnSalir = $("btnSalir"),
+            clavesLista = $("empleadosLista"),
+            clavesError = $("clavesError"), reglasAdmin = $("reglasAdmin"),
+            form = $("form"), fechaEl = $("fecha"),
+            clienteEl = $("cliente"), trabajoEl = $("trabajo"), obsEl = $("observaciones"),
+            btn = $("btnGuardar"), formError = $("formError"), whoName = $("whoName"),
+            connBanner = $("connBanner"), liveBadge = $("liveBadge"), liveText = $("liveText"),
+            lista = $("lista"), listError = $("listError"), listCount = $("listCount"),
+            listTitle = $("listTitle"),
+            skeleton = $("skeleton"), toastEl = $("toast"),
+            buscarEl = $("buscar"), filtroEl = $("filtroEmpleado"),
+            tabsWrap = $("tabsWrap"), tabsBar = $("tabsBar"),
+            formCard = $("formCard"), listBlock = $("listBlock"), statsBlock = $("statsBlock"),
+            empleadosBlock = $("empleadosBlock"), empleadosLista = $("empleadosLista"),
+            clientesBlock = $("clientesBlock"), clientesLista = $("clientesLista"),
+            actividadBlock = $("actividadBlock"), actividadLista = $("actividadLista"),
+            actividadError = $("actividadError");
+
+        var db = null, reportesRef = null, usuariosRef = null,
+            listo = false, escuchaReportes = null, usuariosAdminOn = false,
+            modoCrear = false,
+            sesion = null, usuariosFlags = {}, reportes = [], toastTimer = null,
+            tabActual = "reportes", actConfirmId = null;
+
+        /* ---------- utilidades ---------- */
+        function pad(n) { return (n < 10 ? "0" : "") + n; }
+        function hoyLocal() {
+          var d = new Date();
+          return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+        }
+        function esc(s) {
+          return String(s == null ? "" : s)
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+        }
+        function fechaBonita(ymd) {
+          if (!ymd) return "";
+          var p = String(ymd).split("-");
+          if (p.length !== 3) return esc(ymd);
+          var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+          if (isNaN(d.getTime())) return esc(ymd);
+          var hoy = hoyLocal();
+          var ayerD = new Date(); ayerD.setDate(ayerD.getDate() - 1);
+          var ayer = ayerD.getFullYear() + "-" + pad(ayerD.getMonth() + 1) + "-" + pad(ayerD.getDate());
+          var base = d.toLocaleDateString("es-DO", { weekday: "short", day: "numeric", month: "short" });
+          if (ymd === hoy) return "Hoy · " + base;
+          if (ymd === ayer) return "Ayer · " + base;
+          return base + " " + p[0];
+        }
+        function horaBonita(ts) {
+          if (!ts) return "";
+          var d = new Date(Number(ts));
+          if (isNaN(d.getTime())) return "";
+          return d.toLocaleTimeString("es-DO", {
+            hour: "2-digit", minute: "2-digit", timeZone: "America/Santo_Domingo"
+          });
+        }
+        function esPermiso(e) {
+          var code = (e && e.code) ? String(e.code) : "";
+          var msg = (e && e.message) ? String(e.message) : String(e || "");
+          return code.indexOf("permission-denied") >= 0 || /permission_denied/i.test(msg);
+        }
+        function mensajeError(e) {
+          var code = (e && e.code) ? String(e.code) : "";
+          var msg = (e && e.message) ? String(e.message) : String(e || "Error desconocido");
+          if (esPermiso(e)) {
+            return "El servidor rechazó el acceso (PERMISSION_DENIED). Falta activar el permiso en la consola de Firebase: en Realtime Database → Reglas, la ruta debe permitir lectura y escritura a usuarios autenticados (auth != null). Avísale a Franklin para que lo active.";
+          }
+          if (code.indexOf("unavailable") >= 0 || /unavailable|network/i.test(msg)) {
+            return "Sin conexión con el servidor. Revisa el internet del celular e inténtalo de nuevo.";
+          }
+          return msg;
+        }
+        function mensajeAuth(e, key) {
+          var code = (e && e.code) ? String(e.code) : "";
+          if (code === "auth/wrong-password" || code === "auth/invalid-credential" || code === "auth/user-not-found") {
+            return key === "admin"
+              ? "Contraseña incorrecta. Si es tu primera vez, usa el enlace de abajo para crear tu contraseña."
+              : "Contraseña incorrecta, o este usuario todavía no tiene cuenta. El Administrador debe crearla desde su vista.";
+          }
+          if (code === "auth/email-already-in-use") {
+            return "Esa cuenta ya existe. Entra con la contraseña que ya tiene.";
+          }
+          if (code === "auth/weak-password") {
+            return "Esa contraseña es muy débil. Usa al menos 6 caracteres.";
+          }
+          if (code === "auth/too-many-requests") {
+            return "Demasiados intentos seguidos. Espera un momento e inténtalo de nuevo.";
+          }
+          if (code === "auth/network-request-failed") {
+            return "Sin conexión con el servidor. Revisa el internet del celular e inténtalo de nuevo.";
+          }
+          if (code === "auth/operation-not-allowed") {
+            return "Falta activar el acceso con correo y contraseña en la consola de Firebase: Authentication → Sign-in method → Correo electrónico/contraseña. Avísale a Franklin para que lo active.";
+          }
+          return mensajeError(e);
+        }
+        function mostrarBanner(el, texto, clase) {
+          el.textContent = texto;
+          el.className = "banner show " + clase;
+        }
+        function ocultarBanner(el) { el.className = "banner"; el.textContent = ""; }
+        function toast(msg, esError) {
+          toastEl.textContent = msg;
+          toastEl.className = "toast show" + (esError ? " err" : "");
+          if (toastTimer) clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () { toastEl.className = "toast"; }, 2800);
+        }
+        function setLive(estado, texto) {
+          liveBadge.className = "live" + (estado === "ok" ? "" : estado === "err" ? " err" : " off");
+          liveText.textContent = texto;
+        }
+
+        /* ---------- fecha por defecto ---------- */
+        fechaEl.value = hoyLocal();
+
+        /* ---------- login: opciones de usuario ---------- */
+        USUARIOS.forEach(function (u) {
+          var opt = document.createElement("option");
+          opt.value = u.key;
+          opt.textContent = etiquetaDe(u);
+          loginUsuario.appendChild(opt);
+        });
+
+        function actualizarLogin() {
+          var key = loginUsuario.value;
+          var esAdm = key === "admin";
+          modoCrearLink.hidden = !esAdm;
+          modoCrearLink.textContent = modoCrear
+            ? "Ya tengo cuenta: entrar con mi contraseña"
+            : "Primera vez del Administrador: crear mi contraseña";
+          confirmGroup.hidden = !modoCrear;
+          loginClaveLabel.innerHTML = modoCrear
+            ? 'Crea tu contraseña de Administrador <span class="req">*</span>'
+            : 'Contraseña <span class="req">*</span>';
+          btnEntrar.textContent = modoCrear ? "Crear contraseña y entrar" : "Entrar";
+          loginHint.hidden = !modoCrear;
+          if (modoCrear) {
+            loginHint.className = "hint";
+            loginHint.textContent = "Es la primera vez: crea aquí la contraseña del Administrador. Con ella podrás entrar desde cualquier celular y crear las cuentas de los empleados.";
+          }
+          btnEntrar.disabled = !key || !listo;
+        }
+        loginUsuario.addEventListener("change", function () {
+          ocultarBanner(loginError);
+          if (loginUsuario.value !== "admin") modoCrear = false;
+          actualizarLogin();
+        });
+        modoCrearLink.addEventListener("click", function () {
+          modoCrear = !modoCrear;
+          ocultarBanner(loginError);
+          actualizarLogin();
+          if (modoCrear) loginClave.focus();
+        });
+
+        loginForm.addEventListener("submit", function (ev) {
+          ev.preventDefault();
+          ocultarBanner(loginError);
+          var key = loginUsuario.value;
+          var clave = loginClave.value;
+          if (!key) { mostrarBanner(loginError, "Elige tu usuario.", "err"); loginUsuario.focus(); return; }
+          if (!clave) { mostrarBanner(loginError, "Escribe tu contraseña.", "err"); loginClave.focus(); return; }
+          if (!listo) { mostrarBanner(loginError, "Todavía no hay conexión con el servidor. Espera un momento e inténtalo de nuevo.", "err"); return; }
+
+          btnEntrar.disabled = true;
+          var textoBtn = btnEntrar.textContent;
+          btnEntrar.textContent = modoCrear ? "Creando…" : "Entrando…";
+          function fallo(msg) {
+            btnEntrar.disabled = false;
+            btnEntrar.textContent = textoBtn;
+            mostrarBanner(loginError, msg, "err");
+          }
+
+          if (modoCrear) {
+            if (clave.length < 6) { fallo("La contraseña debe tener al menos 6 caracteres."); return; }
+            if (clave !== loginClave2.value) { fallo("Las contraseñas no coinciden. Escríbela dos veces igual."); loginClave2.focus(); return; }
+            firebase.auth().createUserWithEmailAndPassword(emailDe("admin"), clave)
+              .then(function () {
+                btnEntrar.textContent = textoBtn;
+                toast("Cuenta de Administrador creada ✓");
+                /* onAuthStateChanged hace la entrada */
+              })
+              .catch(function (e) { fallo(mensajeAuth(e, "admin")); });
+            return;
+          }
+
+          firebase.auth().signInWithEmailAndPassword(emailDe(key), clave)
+            .then(function () { btnEntrar.textContent = textoBtn; /* entra por onAuthStateChanged */ })
+            .catch(function (e) {
+              fallo(mensajeAuth(e, key));
+              loginClave.select();
+            });
+        });
+
+        function entrar(key) {
+          if (sesion === key && !appView.hidden) return;
+          sesion = key;
+          loginClave.value = "";
+          loginClave2.value = "";
+          modoCrear = false;
+          ocultarBanner(loginError);
+          loginView.hidden = true;
+          appView.hidden = false;
+          sessionChip.hidden = false;
+          sessionName.textContent = etiquetaSesion();
+          whoName.textContent = etiquetaSesion();
+          tabActual = esAdmin() ? "reportes" : "nuevo";
+          filtroEl.hidden = !esAdmin();
+          if (!esAdmin()) filtroEl.value = "";
+          listTitle.textContent = esAdmin() ? "Reportes recibidos" : "Mis reportes";
+          btn.disabled = false;
+          ocultarBanner(connBanner);
+          setLive("ok", "En vivo");
+          if (esAdmin()) iniciarUsuariosAdmin();
+          iniciarEscuchaReportes();
+          renderEmpleados();
+          actualizarStats();
+          render();
+          aplicarTab();
+          window.scrollTo(0, 0);
+        }
+
+        /* ---------- pestañas (mismo diseño que Aceron · Trabajos) ---------- */
+        function tabsDef() {
+          return esAdmin()
+            ? [ { id: "reportes", t: "Reportes" }, { id: "empleados", t: "Empleados" },
+                { id: "clientes", t: "Clientes" }, { id: "actividad", t: "Actividad" } ]
+            : [ { id: "nuevo", t: "Nuevo reporte" }, { id: "mios", t: "Mis reportes" } ];
+        }
+        function renderTabs() {
+          if (!sesion) { tabsWrap.hidden = true; return; }
+          tabsWrap.hidden = false;
+          tabsBar.innerHTML = tabsDef().map(function (d) {
+            return '<button type="button" role="tab" data-tab="' + d.id + '"' +
+              (tabActual === d.id ? ' class="on"' : "") + ">" + d.t + "</button>";
+          }).join("");
+        }
+        function aplicarTab() {
+          if (!sesion) { tabsWrap.hidden = true; return; }
+          var adm = esAdmin();
+          if (adm && ["reportes", "empleados", "clientes", "actividad"].indexOf(tabActual) < 0) tabActual = "reportes";
+          if (!adm && tabActual !== "nuevo" && tabActual !== "mios") tabActual = "nuevo";
+          empleadosBlock.hidden = !(adm && tabActual === "empleados");
+          clientesBlock.hidden = !(adm && tabActual === "clientes");
+          actividadBlock.hidden = !(adm && tabActual === "actividad");
+          if (adm) {
+            var enReportes = tabActual === "reportes";
+            formCard.style.display = enReportes ? "" : "none";
+            listBlock.style.display = enReportes ? "" : "none";
+            statsBlock.style.display = enReportes ? "" : "none";
+            if (tabActual === "empleados") renderEmpleados();
+            if (tabActual === "clientes") renderClientes();
+            if (tabActual === "actividad") renderActividad();
+          } else {
+            formCard.style.display = tabActual === "nuevo" ? "" : "none";
+            listBlock.style.display = tabActual === "mios" ? "" : "none";
+            statsBlock.style.display = "";
+          }
+          renderTabs();
+        }
+        tabsBar.addEventListener("click", function (ev) {
+          var b = ev.target && ev.target.closest ? ev.target.closest("[data-tab]") : null;
+          if (!b) return;
+          tabActual = b.getAttribute("data-tab");
+          aplicarTab();
+          window.scrollTo(0, 0);
+        });
+
+        /* Tarjetas del equipo, como la pestaña Empleados de Aceron · Trabajos:
+           una tarjeta por persona, con sus números y su botón para poner o
+           cambiar su contraseña (un empleado sin cuenta no puede entrar). */
+        function claveEnEdicion() {
+          if (document.activeElement && empleadosLista.contains(document.activeElement) &&
+              document.activeElement.tagName === "INPUT") return true;
+          var ins = empleadosLista.querySelectorAll("input");
+          for (var i = 0; i < ins.length; i++) if (ins[i].value) return true;
+          return false;
+        }
+        function renderEmpleados() {
+          if (!esAdmin()) { empleadosLista.innerHTML = ""; return; }
+          var hoy = hoyLocal();
+          var d = new Date(); d.setDate(d.getDate() - 6);
+          var desde = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+          empleadosLista.innerHTML = USUARIOS.map(function (u) {
+            var rs = reportes.filter(function (r) { return r.empleado === u.nombre; });
+            var nHoy = 0, nSem = 0, ultimo = "";
+            rs.forEach(function (r) {
+              if (r.fecha === hoy) nHoy++;
+              if (r.fecha && r.fecha >= desde && r.fecha <= hoy) nSem++;
+              if (r.fecha && r.fecha > ultimo) ultimo = r.fecha;
+            });
+            var con = tieneCuenta(u.key);
+            var inputs = con
+              ? '<input type="password" autocomplete="off" placeholder="Contraseña actual" data-actual="' + u.key + '" />' +
+                '<input type="password" autocomplete="new-password" placeholder="Contraseña nueva" data-nueva="' + u.key + '" />' +
+                '<button type="button" class="btn-mini" data-cambiar="' + u.key + '">Cambiar</button>'
+              : '<input type="password" autocomplete="new-password" placeholder="Contraseña para su cuenta" data-crear-input="' + u.key + '" />' +
+                '<button type="button" class="btn-mini" data-crear="' + u.key + '">Crear cuenta</button>';
+            return (
+              '<div class="card emp-card">' +
+                '<div class="emp-head"><h3>' + esc(nombreVisible(u.nombre)) + '</h3>' +
+                '<span class="tag-puesto">' + esc(u.key === "admin" ? "Administrador" : u.puesto) + "</span></div>" +
+                '<div class="emp-grid">' +
+                  '<div class="stat"><div class="l">Reportes de hoy</div><div class="v" style="color:var(--green)">' + nHoy + "</div></div>" +
+                  '<div class="stat"><div class="l">Esta semana</div><div class="v" style="color:var(--accent)">' + nSem + "</div></div>" +
+                "</div>" +
+                '<div class="stat" style="margin-top:10px"><div class="l">Total de reportes</div><div class="v">' + rs.length + "</div></div>" +
+                '<div class="hint" style="margin-top:8px">' + (ultimo ? "Último reporte: " + esc(fechaBonita(ultimo)) : "Todavía no ha enviado reportes") + "</div>" +
+                '<div class="clave-row">' +
+                  '<div class="clave-info">' +
+                    '<div class="clave-name">Contraseña</div>' +
+                    '<span class="pill ' + (con ? "on" : "off") + '">' + (con ? "Con cuenta" : "Sin cuenta") + "</span>" +
+                  "</div>" +
+                  inputs +
+                "</div>" +
+              "</div>"
+            );
+          }).join("");
+        }
+
+        /* Pestaña Clientes: una tarjeta por cliente que aparece en los reportes. */
+        function renderClientes() {
+          if (!esAdmin()) { clientesLista.innerHTML = ""; return; }
+          var mapa = {};
+          reportes.forEach(function (r) {
+            var c = String(r.cliente || "").trim() || "Sin cliente";
+            if (!mapa[c]) mapa[c] = { nombre: c, n: 0, ultimo: "", empleados: {} };
+            mapa[c].n++;
+            if (r.fecha && r.fecha > mapa[c].ultimo) mapa[c].ultimo = r.fecha;
+            if (r.empleado) mapa[c].empleados[r.empleado] = true;
+          });
+          var arr = Object.keys(mapa).map(function (k) { return mapa[k]; });
+          arr.sort(function (a, b) { return (b.n - a.n) || a.nombre.localeCompare(b.nombre); });
+          if (!arr.length) {
+            clientesLista.innerHTML =
+              '<div class="empty"><b>Todavía no hay clientes</b>' +
+              "Los clientes aparecen aquí cuando llegan reportes con su nombre.</div>";
+            return;
+          }
+          clientesLista.innerHTML = arr.map(function (c) {
+            var emps = Object.keys(c.empleados).map(nombreVisible).join(", ");
+            return (
+              '<div class="card emp-card">' +
+                '<div class="emp-head"><h3>' + esc(c.nombre) + '</h3>' +
+                '<span class="tag-puesto">' + c.n + (c.n === 1 ? " reporte" : " reportes") + "</span></div>" +
+                '<div class="hint" style="margin-top:8px">' +
+                  (c.ultimo ? "Último reporte: " + esc(fechaBonita(c.ultimo)) : "") +
+                  (emps ? "<br />Reportan: " + esc(emps) : "") +
+                "</div>" +
+                '<div class="act-btns"><button type="button" class="btn-mini" data-ver-cliente="' + esc(c.nombre) + '">Ver reportes</button></div>' +
+              "</div>"
+            );
+          }).join("");
+        }
+
+        /* Pestaña Actividad: los reportes y los movimientos, con sus botones. */
+        function ymdDeTs(ts) {
+          var d = new Date(Number(ts));
+          if (isNaN(d.getTime())) return "";
+          return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+        }
+        function renderActividad() {
+          if (!esAdmin()) { actividadLista.innerHTML = ""; return; }
+          var items = [];
+          reportes.forEach(function (r) { items.push({ ts: Number(r.creadoEn) || 0, tipo: "reporte", r: r }); });
+          Object.keys(usuariosFlags).forEach(function (k) {
+            var f = usuariosFlags[k];
+            if (f && f.creadoEn) items.push({ ts: Number(f.creadoEn) || 0, tipo: "cuenta", key: k });
+          });
+          items.sort(function (a, b) { return b.ts - a.ts; });
+          if (!items.length) {
+            actividadLista.innerHTML =
+              '<div class="empty"><b>Sin actividad todavía</b>' +
+              "Aquí se ven los reportes que llegan y las cuentas que se crean.</div>";
+            return;
+          }
+          actividadLista.innerHTML = items.map(function (it) {
+            if (it.tipo === "cuenta") {
+              var u = usuarioPorKey(it.key);
+              var horaC = horaBonita(it.ts);
+              return (
+                '<div class="card">' +
+                  '<div class="report-work" style="margin-top:0">Se creó la cuenta de <b>' + esc(u ? etiquetaDe(u) : it.key) + "</b></div>" +
+                  '<div class="hint" style="margin-top:6px">' + esc(fechaBonita(ymdDeTs(it.ts))) + (horaC ? " · " + esc(horaC) : "") + "</div>" +
+                "</div>"
+              );
+            }
+            var r = it.r;
+            var hora = horaBonita(r.creadoEn);
+            var resumen = String(r.trabajo || "");
+            if (resumen.length > 160) resumen = resumen.slice(0, 160) + "…";
+            var botones = actConfirmId === r._id
+              ? '<div class="act-btns">' +
+                  '<button type="button" class="btn-mini danger" data-borrar-si="' + esc(r._id) + '">Borrar definitivamente</button>' +
+                  '<button type="button" class="btn-mini" data-borrar-no="1">Cancelar</button>' +
+                "</div>"
+              : '<div class="act-btns">' +
+                  '<button type="button" class="btn-mini" data-borrar="' + esc(r._id) + '">Borrar reporte</button>' +
+                "</div>";
+            return (
+              '<div class="card">' +
+                '<div class="report-top">' +
+                  '<div class="report-who">' + esc(nombreVisible(r.empleado)) + "</div>" +
+                  '<div class="report-when">' + esc(fechaBonita(r.fecha)) + (hora ? "<br />" + esc(hora) : "") + "</div>" +
+                "</div>" +
+                '<div class="report-work">Envió un reporte' + (r.cliente ? " · " + esc(r.cliente) : "") + "</div>" +
+                (resumen ? '<div class="hint" style="margin-top:4px">' + esc(resumen) + "</div>" : "") +
+                botones +
+              "</div>"
+            );
+          }).join("");
+        }
+
+        function vistaLogin() {
+          sesion = null;
+          tabsWrap.hidden = true;
+          if (escuchaReportes) { escuchaReportes.off(); escuchaReportes = null; }
+          if (usuariosAdminOn && usuariosRef) { usuariosRef.off(); usuariosAdminOn = false; }
+          reportes = [];
+          usuariosFlags = {};
+          appView.hidden = true;
+          sessionChip.hidden = true;
+          loginView.hidden = false;
+          loginClave.value = "";
+          loginClave2.value = "";
+          ocultarBanner(loginError);
+          actualizarLogin();
+        }
+
+        btnSalir.addEventListener("click", function () {
+          firebase.auth().signOut().catch(function () { vistaLogin(); });
+        });
+
+        /* ---------- cuentas del equipo (solo admin) ---------- */
+        function tieneCuenta(key) {
+          if (key === "admin") return true;
+          return !!usuariosFlags[key];
+        }
+        /* Las tarjetas del equipo con su botón de contraseña se pintan en renderEmpleados(). */
+
+        function appSecundaria() {
+          return firebase.initializeApp(firebaseConfig, "secundaria-" + Date.now());
+        }
+        function cerrarSecundaria(app) {
+          try { app.auth().signOut(); } catch (e) {}
+          try { app.delete(); } catch (e) {}
+        }
+
+        clavesLista.addEventListener("click", function (ev) {
+          var target = ev.target;
+          if (!target || !target.getAttribute || !esAdmin()) return;
+          var keyCrear = target.getAttribute("data-crear");
+          var keyCambiar = target.getAttribute("data-cambiar");
+          var u, input, actualEl, nuevaEl, actual, nueva;
+          ocultarBanner(clavesError);
+
+          if (keyCrear) {
+            u = usuarioPorKey(keyCrear);
+            input = clavesLista.querySelector('[data-crear-input="' + keyCrear + '"]');
+            nueva = input ? input.value : "";
+            if (!nueva || nueva.length < 6) {
+              mostrarBanner(clavesError, "La contraseña para " + (u ? u.nombre : keyCrear) + " debe tener al menos 6 caracteres.", "err");
+              if (input) input.focus();
+              return;
+            }
+            target.disabled = true;
+            var appS = appSecundaria();
+            appS.auth().createUserWithEmailAndPassword(emailDe(keyCrear), nueva)
+              .then(function () {
+                cerrarSecundaria(appS);
+                return usuariosRef.child(keyCrear).set({ creadoEn: firebase.database.ServerValue.TIMESTAMP });
+              })
+              .then(function () {
+                target.disabled = false;
+                if (input) input.value = "";
+                toast("Cuenta creada para " + (u ? u.nombre : keyCrear) + " ✓");
+              })
+              .catch(function (e) {
+                cerrarSecundaria(appS);
+                target.disabled = false;
+                if (esPermiso(e)) reglasAdmin.hidden = false;
+                mostrarBanner(clavesError, "No se pudo crear la cuenta: " + mensajeAuth(e, keyCrear) +
+                  (esPermiso(e) ? " Si el error es de reglas, agrega el bloque de la ruta reportes_usuarios (abajo está el bloque exacto)." : ""), "err");
+              });
+            return;
+          }
+
+          if (keyCambiar) {
+            u = usuarioPorKey(keyCambiar);
+            actualEl = clavesLista.querySelector('[data-actual="' + keyCambiar + '"]');
+            nuevaEl = clavesLista.querySelector('[data-nueva="' + keyCambiar + '"]');
+            actual = actualEl ? actualEl.value : "";
+            nueva = nuevaEl ? nuevaEl.value : "";
+            if (!actual) { mostrarBanner(clavesError, "Escribe la contraseña actual de " + (u ? u.nombre : keyCambiar) + " para poder cambiársela.", "err"); if (actualEl) actualEl.focus(); return; }
+            if (!nueva || nueva.length < 6) { mostrarBanner(clavesError, "La contraseña nueva debe tener al menos 6 caracteres.", "err"); if (nuevaEl) nuevaEl.focus(); return; }
+            target.disabled = true;
+
+            if (keyCambiar === "admin") {
+              var yo = firebase.auth().currentUser;
+              var cred = firebase.auth.EmailAuthProvider.credential(emailDe("admin"), actual);
+              yo.reauthenticateWithCredential(cred)
+                .then(function () { return yo.updatePassword(nueva); })
+                .then(function () {
+                  target.disabled = false;
+                  if (actualEl) actualEl.value = "";
+                  if (nuevaEl) nuevaEl.value = "";
+                  toast("Tu contraseña de Administrador quedó cambiada ✓");
+                })
+                .catch(function (e) {
+                  target.disabled = false;
+                  mostrarBanner(clavesError, "No se pudo cambiar tu contraseña: " + mensajeAuth(e, "admin"), "err");
+                });
+              return;
+            }
+
+            var appS2 = appSecundaria();
+            appS2.auth().signInWithEmailAndPassword(emailDe(keyCambiar), actual)
+              .then(function (cred2) { return cred2.user.updatePassword(nueva); })
+              .then(function () {
+                cerrarSecundaria(appS2);
+                target.disabled = false;
+                if (actualEl) actualEl.value = "";
+                if (nuevaEl) nuevaEl.value = "";
+                toast("Contraseña cambiada para " + (u ? u.nombre : keyCambiar) + " ✓");
+              })
+              .catch(function (e) {
+                cerrarSecundaria(appS2);
+                target.disabled = false;
+                mostrarBanner(clavesError, "No se pudo cambiar la contraseña de " + (u ? u.nombre : keyCambiar) + ": " + mensajeAuth(e, keyCambiar), "err");
+              });
+          }
+        });
+
+        /* La lista de cuentas (sin ninguna contraseña) solo se lee dentro de la vista del Administrador. */
+        function iniciarUsuariosAdmin() {
+          if (usuariosAdminOn || !usuariosRef) return;
+          usuariosAdminOn = true;
+          usuariosRef.on("value", function (snap) {
+            usuariosFlags = snap.val() || {};
+            reglasAdmin.hidden = true;
+            ocultarBanner(clavesError);
+            renderEmpleados();
+            if (tabActual === "actividad") renderActividad();
+          }, function (e) {
+            if (esPermiso(e)) reglasAdmin.hidden = false;
+            mostrarBanner(clavesError,
+              "No se pudo cargar la lista de cuentas: " + mensajeError(e) +
+              (esPermiso(e) ? " Hay que agregar el bloque de la ruta reportes_usuarios en las reglas, sin borrar lo que ya hay (abajo está el bloque exacto)." : ""),
+              "err");
+          });
+        }
+
+        /* ---------- render de la lista ---------- */
+        function reportesVisibles() {
+          if (!sesion) return [];
+          if (esAdmin()) return reportes;
+          var nombre = nombreSesion();
+          return reportes.filter(function (r) { return r.empleado === nombre; });
+        }
+
+        function render() {
+          if (!sesion) return;
+          var base = reportesVisibles();
+          var q = buscarEl.value.trim().toLowerCase();
+          var fEmp = esAdmin() ? filtroEl.value : "";
+          var visibles = base.filter(function (r) {
+            if (fEmp && r.empleado !== fEmp) return false;
+            if (q) {
+              var h = ((r.cliente || "") + " " + (r.trabajo || "") + " " + (r.empleado || "")).toLowerCase();
+              if (h.indexOf(q) < 0) return false;
+            }
+            return true;
+          });
+
+          listCount.textContent = base.length
+            ? visibles.length + " de " + base.length
+            : "";
+
+          if (!base.length) {
+            lista.innerHTML = esAdmin()
+              ? '<div class="empty"><b>Todavía no hay reportes</b>' +
+                "Cuando un empleado envíe el primer reporte desde su celular, aparecerá aquí al momento.</div>"
+              : '<div class="empty"><b>Todavía no tienes reportes</b>' +
+                "Cuando envíes tu primer reporte, aparecerá aquí al momento.</div>";
+            return;
+          }
+          if (!visibles.length) {
+            lista.innerHTML =
+              '<div class="empty"><b>Sin resultados</b>' +
+              "Ningún reporte coincide con la búsqueda o el filtro elegido.</div>";
+            return;
+          }
+          lista.innerHTML = visibles.map(function (r) {
+            var hora = horaBonita(r.creadoEn);
+            var obs = (r.observaciones || "").trim();
+            return (
+              '<article class="report">' +
+                '<div class="report-top">' +
+                  '<div class="report-who">' + esc(nombreVisible(r.empleado)) + "</div>" +
+                  '<div class="report-when">' + esc(fechaBonita(r.fecha)) + (hora ? "<br />" + esc(hora) : "") + "</div>" +
+                "</div>" +
+                (r.cliente ? '<span class="tag"><span class="dot"></span><span>' + esc(r.cliente) + "</span></span>" : "") +
+                '<div class="report-work">' + esc(r.trabajo || "") + "</div>" +
+                (obs ? '<div class="report-obs"><b>Observaciones</b>' + esc(obs) + "</div>" : "") +
+              "</article>"
+            );
+          }).join("");
+        }
+
+        function actualizarStats() {
+          if (!sesion) return;
+          var base = reportesVisibles();
+          var hoy = hoyLocal();
+          var d = new Date(); d.setDate(d.getDate() - 6);
+          var desde = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+          var mes = hoy.slice(0, 7);
+          var nHoy = 0, nSem = 0, nMes = 0;
+          base.forEach(function (r) {
+            if (r.fecha === hoy) nHoy++;
+            if (r.fecha && r.fecha >= desde && r.fecha <= hoy) nSem++;
+            if (r.fecha && r.fecha.slice(0, 7) === mes) nMes++;
+          });
+          $("statHoy").textContent = String(nHoy);
+          $("statSemana").textContent = String(nSem);
+          $("statMes").textContent = String(nMes);
+          $("statTotal").textContent = String(base.length);
+        }
+
+        buscarEl.addEventListener("input", render);
+        filtroEl.addEventListener("change", render);
+
+        /* Botón «Ver reportes» de cada tarjeta de cliente */
+        clientesLista.addEventListener("click", function (ev) {
+          var t = ev.target;
+          if (!t || !t.getAttribute || !esAdmin()) return;
+          var c = t.getAttribute("data-ver-cliente");
+          if (c === null) return;
+          tabActual = "reportes";
+          buscarEl.value = c === "Sin cliente" ? "" : c;
+          aplicarTab();
+          render();
+          window.scrollTo(0, 0);
+        });
+
+        /* Botones de la pestaña Actividad: borrar un reporte, con confirmación en la misma tarjeta */
+        actividadLista.addEventListener("click", function (ev) {
+          var t = ev.target;
+          if (!t || !t.getAttribute || !esAdmin()) return;
+          var idB = t.getAttribute("data-borrar");
+          var idSi = t.getAttribute("data-borrar-si");
+          var no = t.getAttribute("data-borrar-no");
+          ocultarBanner(actividadError);
+          if (idB) { actConfirmId = idB; renderActividad(); return; }
+          if (no !== null) { actConfirmId = null; renderActividad(); return; }
+          if (idSi) {
+            actConfirmId = null;
+            t.disabled = true;
+            reportesRef.child(idSi).remove()
+              .then(function () { toast("Reporte borrado ✓"); })
+              .catch(function (e) {
+                mostrarBanner(actividadError, "No se pudo borrar el reporte: " + mensajeError(e), "err");
+                renderActividad();
+              });
+          }
+        });
+
+        function iniciarEscuchaReportes() {
+          if (escuchaReportes) { escuchaReportes.off(); escuchaReportes = null; }
+          if (!reportesRef || !sesion) return;
+          /* El empleado pide al servidor solo sus reportes; el Administrador recibe todos. */
+          var destino = esAdmin()
+            ? reportesRef
+            : reportesRef.orderByChild("empleado").equalTo(nombreSesion());
+          escuchaReportes = destino;
+          destino.on("value", function (snap) {
+            var val = snap.val() || {};
+            reportes = Object.keys(val).map(function (k) {
+              var r = val[k] || {};
+              r._id = k;
+              return r;
+            });
+            reportes.sort(function (x, y) {
+              var ca = Number(x.creadoEn) || 0, cb = Number(y.creadoEn) || 0;
+              if (cb !== ca) return cb - ca;
+              return String(y.fecha || "").localeCompare(String(x.fecha || ""));
+            });
+            skeleton.style.display = "none";
+            ocultarBanner(listError);
+            actualizarStats();
+            render();
+            if (esAdmin() && tabActual === "empleados" && !claveEnEdicion()) renderEmpleados();
+            if (esAdmin() && tabActual === "clientes") renderClientes();
+            if (esAdmin() && tabActual === "actividad" && !actConfirmId) renderActividad();
+          }, function (e) {
+            skeleton.style.display = "none";
+            setLive("err", "Error de lectura");
+            mostrarBanner(listError,
+              "No se pudieron cargar los reportes: " + mensajeError(e),
+              "err");
+          });
+        }
+
+        /* ---------- arranque de Firebase ---------- */
+        if (typeof firebase === "undefined") {
+          skeleton.style.display = "none";
+          setLive("err", "Sin conexión");
+          mostrarBanner(loginError,
+            "No se pudo cargar la conexión con el servidor (Firebase). Revisa el internet del celular y recarga la página.",
+            "err");
+          return;
+        }
+
+        try {
+          firebase.initializeApp(firebaseConfig);
+          db = firebase.database();
+          reportesRef = db.ref("reportes_trabajo");
+          usuariosRef = db.ref("reportes_usuarios");
+        } catch (e) {
+          skeleton.style.display = "none";
+          setLive("err", "Error");
+          mostrarBanner(loginError, "Error al iniciar: " + mensajeError(e), "err");
+          return;
+        }
+
+        try {
+          firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+            .catch(function () { /* si no se puede, se sigue con la predeterminada */ });
+        } catch (e) { /* la sesión sigue funcionando en memoria */ }
+
+        /* Estado de conexión del propio Firebase */
+        db.ref(".info/connected").on("value", function (snap) {
+          if (!sesion) return;
+          if (snap.val() === true) setLive("ok", "En vivo");
+          else setLive("off", "Sin conexión");
+        });
+
+        firebase.auth().onAuthStateChanged(function (user) {
+          listo = true;
+          if (user) {
+            var k = keyDeEmail(user.email);
+            if (k) { entrar(k); return; }
+            firebase.auth().signOut();
+          }
+          vistaLogin();
+        });
+
+        /* ---------- envío del formulario ---------- */
+        form.addEventListener("submit", function (ev) {
+          ev.preventDefault();
+          ocultarBanner(formError);
+
+          var empleado = nombreSesion();
+          var fecha = fechaEl.value;
+          var cliente = clienteEl.value.trim();
+          var trabajo = trabajoEl.value.trim();
+          var observaciones = obsEl.value.trim();
+
+          if (!sesion || !empleado) { mostrarBanner(formError, "Primero entra con tu usuario y contraseña.", "err"); return; }
+          if (!fecha) { mostrarBanner(formError, "Falta la fecha del trabajo.", "err"); fechaEl.focus(); return; }
+          if (!cliente) { mostrarBanner(formError, "Falta el cliente. Escribe para quién fue el trabajo.", "err"); clienteEl.focus(); return; }
+          if (!trabajo) { mostrarBanner(formError, "Falta el trabajo realizado. Describe qué hiciste.", "err"); trabajoEl.focus(); return; }
+          if (!listo || !reportesRef) { mostrarBanner(formError, "Todavía no hay conexión con el servidor. Espera a que diga «En vivo» e inténtalo de nuevo.", "err"); return; }
+
+          btn.disabled = true;
+          btn.textContent = "Guardando…";
+
+          reportesRef.push({
+            empleado: empleado,
+            fecha: fecha,
+            cliente: cliente,
+            trabajo: trabajo,
+            observaciones: observaciones,
+            creadoEn: firebase.database.ServerValue.TIMESTAMP
+          }).then(function () {
+            btn.disabled = false;
+            btn.textContent = "Guardar reporte";
+            clienteEl.value = "";
+            trabajoEl.value = "";
+            obsEl.value = "";
+            fechaEl.value = hoyLocal();
+            toast("Reporte guardado ✓ Ya se ve en la lista");
+            if (!esAdmin()) { tabActual = "mios"; aplicarTab(); }
+            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+          }).catch(function (e) {
+            btn.disabled = false;
+            btn.textContent = "Guardar reporte";
+            mostrarBanner(formError, "No se pudo guardar el reporte: " + mensajeError(e), "err");
+            toast("No se pudo guardar el reporte", true);
+          });
+        });
+
+        actualizarLogin();
+      })();
+    </script>
+  </body>
+</html>
